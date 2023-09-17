@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "name": "RSUD Idaman Banjarbaru",
+      "type": "C",
+      "location": "Jalan Sungai Sumba No 115, Guntung Manggis, Kec. Landasan Ulin, Kota Banjarbaru, Kalimantan Selatan 70724",
+      "contact": "0000-0000-0000",
+      "latitude": "-3.460923089205958",
+      "longitude": "114.80079981737616"
+    },
+    {
+      "name": "RS Al-Mansyur Medika",
+      "type": "C",
+      "location": "Jalan Ahmad Yani No 36, Sungai Ulin, Kec. Banjarbaru Utara, Kota Banjarbaru, Kalimantan Selatan 70714",
+      "contact": "0000-0000-0000",
+      "latitude": "-3.4416630258087766",
+      "longitude": "114.84821256683844"
+    },
+    {
+      "name": "RS Auri Syamsudin Noor",
+      "type": "A",
+      "location": "Jalan Hercules No1, Landasan Ulin Tengah, Kec. Liang Anggang, Kota Banjarbaru, Kalimantan Selatan 70723",
+      "contact": "0000-0000-0000",
+      "latitude": "-3.44449951692851",
+      "longitude": "114.74462040916688"
+    },
+    {
+      "name": "RS Guntung Payung",
+      "type": "C",
+      "location": "Jalan Ahmad Yani No 56, Guntung Manggis, Kec. Landasan Ulin, Kota Banjarbaru, Kalimantan Selatan 70724",
+      "contact": "0000-0000-0000",
+      "latitude": "-3.4490389025039696",
+      "longitude": "114.79958608033117"
+    },
+    {
+      "name": "RS Islam Sultan Agung",
+      "type": "B",
+      "location": "Jalan Ahmad Yani No 17, Landasan Ulin Barat, Kec. Liang Anggang, Kota Banjarbaru, Kalimantan Selatan 70722",
+      "contact": "0000-0000-0000",
+      "latitude": "-3.43055561567994",
+      "longitude": "114.69898472725951"
+    },
+    {
+      "name": "RS Mawar Banjarbaru",
+      "type": "C",
+      "location": "Jalan Panglima Batur No 52, Loktabat Utara, Kec. Banjarbaru Utara, Kota Banjarbaru, Kalimantan Selatan 70714",
+      "contact": "0000-0000-0000",
+      "latitude": "-3.4387482258057194",
+      "longitude": "114.83802558449366"
+    },
+    {
+      "name": "RS Nirwana",
+      "type": "D",
+      "location": "Jalan Panglima Batur No 42, Loktabat Utara, Kec. Banjarbaru Utara, Kota Banjarbaru, Kalimantan Selatan 70714",
+      "contact": "0000-0000-0000",
+      "latitude": "-3.4390755443135466",
+      "longitude": "114.84050202451014"
+    }
+  ]
+}

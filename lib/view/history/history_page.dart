@@ -1,19 +1,11 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:cardia_watch/view/connect_page.dart';
-import 'package:cardia_watch/view/settings_page.dart';
-import 'package:cardia_watch/view/widgets/heart_rate_card.dart';
 import 'package:cardia_watch/view/widgets/line_chart_data.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
-import 'package:get/get.dart';
-import '../controller/history_page_controller.dart';
-import '../controller/home_page_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../controller/news_page_controller.dart';
-import 'home_page.dart';
-import 'news_page.dart';
+import '../../controller/history_page_controller.dart';
+import '../home_page.dart';
 
 class HistoryPage extends GetView<HistoryPageController> {
   const HistoryPage({Key? key}) : super(key: key);
@@ -37,13 +29,12 @@ class HistoryPage extends GetView<HistoryPageController> {
               height: 60,
               child: Card(
                   margin:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   color: Colors.teal.shade50,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: Obx(() =>
-                      Row(
+                  child: Obx(() => Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           IconButton(
@@ -52,36 +43,38 @@ class HistoryPage extends GetView<HistoryPageController> {
                             onPressed: () {
                               if (controller.daysLength.value > 0) {
                                 controller.daysLength.value--;
-                                controller.getHeartRateHistory(controller.daysInMonth[controller.daysLength.value]);
+                                controller.getHeartRateHistory(controller
+                                    .daysInMonth[controller.daysLength.value]);
                               }
                             },
                           ),
                           Text(
                               controller.daysInMonth.isNotEmpty
                                   ? controller
-                                  .daysInMonth[controller.daysLength.value]
-                                  .toString()
-                                  .substring(0, 10)
+                                      .daysInMonth[controller.daysLength.value]
+                                      .toString()
+                                      .substring(0, 10)
                                   : controller.dateYesterday
-                                  .toString()
-                                  .substring(0, 10),
+                                      .toString()
+                                      .substring(0, 10),
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w700)),
                           IconButton(
                             icon: const Icon(Icons.navigate_next),
                             color: Colors.teal,
                             onPressed: () {
-                              if (controller.daysLength.value < controller.daysInMonth.length - 1) {
+                              if (controller.daysLength.value <
+                                  controller.daysInMonth.length - 1) {
                                 controller.daysLength.value++;
-                                controller.getHeartRateHistory(controller.daysInMonth[controller.daysLength.value]);
+                                controller.getHeartRateHistory(controller
+                                    .daysInMonth[controller.daysLength.value]);
                               }
                             },
                           ),
                         ],
                       ))),
             ),
-            Obx(() =>
-                Card(
+            Obx(() => Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0)),
                   color: Colors.teal.shade50,
@@ -98,14 +91,13 @@ class HistoryPage extends GetView<HistoryPageController> {
                             bottom: 12,
                           ),
                           child: LineChart(
-                              lineData(controller.dayHeartRateSpots.value)),
+                              lineData(controller.dayHeartRateSpots)),
                         ),
                       ),
                     ],
                   ),
                 )),
-            Obx(() =>
-                Card(
+            Obx(() => Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0)),
                   color: Colors.teal.shade50,
@@ -175,16 +167,14 @@ class HistoryPage extends GetView<HistoryPageController> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: controller.iconList,
-        activeIndex: 1,
+        icons: controller.utilService.iconList,
+        activeColor: Colors.teal,
+        activeIndex: 0,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.defaultEdge,
         leftCornerRadius: 15,
         rightCornerRadius: 15,
-        onTap: (index) =>
-        index == 0
-            ? Get.to(() => const HistoryPage())
-            : Get.to(() => const NewsPage()),
+        onTap: (index) => Get.toNamed((controller.utilService.pageList[index])),
       ),
     );
   }

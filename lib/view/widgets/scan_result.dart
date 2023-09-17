@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class ScanResultTile extends StatelessWidget {
-  const ScanResultTile({Key? key, required this.result, this.onTap}) : super(key: key);
+  const ScanResultTile({Key? key, required this.result, this.onTap})
+      : super(key: key);
 
   final ScanResult result;
   final VoidCallback? onTap;
@@ -28,32 +29,6 @@ class ScanResultTile extends StatelessWidget {
     }
   }
 
-  String getNiceHexArray(List<int> bytes) {
-    return '[${bytes.map((i) => i.toRadixString(16).padLeft(2, '0')).join(', ')}]'.toUpperCase();
-  }
-
-  String getNiceManufacturerData(Map<int, List<int>> data) {
-    if (data.isEmpty) {
-      return 'N/A';
-    }
-    List<String> res = [];
-    data.forEach((id, bytes) {
-      res.add('${id.toRadixString(16).toUpperCase()}: ${getNiceHexArray(bytes)}');
-    });
-    return res.join(', ');
-  }
-
-  String getNiceServiceData(Map<String, List<int>> data) {
-    if (data.isEmpty) {
-      return 'N/A';
-    }
-    List<String> res = [];
-    data.forEach((id, bytes) {
-      res.add('${id.toUpperCase()}: ${getNiceHexArray(bytes)}');
-    });
-    return res.join(', ');
-  }
-
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
@@ -70,6 +45,3 @@ class ScanResultTile extends StatelessWidget {
     );
   }
 }
-
-
-

@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:cardia_watch/service/utils_service.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
 class HomePageController extends GetxController {
+  final UtilService utilService = UtilService();
   final date = ''.obs;
   final heartRate = 0.obs;
   final todayHeartRate = <Map<dynamic, dynamic>>[].obs;
@@ -14,11 +15,6 @@ class HomePageController extends GetxController {
   final isConnected = false.obs;
   final deviceId = ''.obs;
   late StreamSubscription scanStream;
-
-  final iconList = <IconData>[
-    Icons.bar_chart,
-    Icons.newspaper,
-  ];
 
   @override
   void onInit() {
@@ -113,20 +109,7 @@ class HomePageController extends GetxController {
       DateTime dateToday = DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day);
       final value = boxHistory.get(dateToday.toString());
-      heartRateSpots.value = chartData(value);
+      heartRateSpots.value = utilService.chartData(value);
     }
-  }
-
-  List<FlSpot> chartData(List<double> data) {
-    return data
-        .asMap()
-        .entries
-        .map((entry) {
-          final x = entry.key.toDouble();
-          final y = entry.value.toDouble();
-          return FlSpot(x, y);
-        })
-        .toList()
-        .obs;
   }
 }

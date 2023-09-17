@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 
@@ -8,11 +6,7 @@ class RoundedImageCard extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;
 
-  RoundedImageCard({
-    required this.imageUrl,
-    required this.title,
-    this.onTap
-  });
+  const RoundedImageCard({super.key, required this.imageUrl, required this.title, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +19,25 @@ class RoundedImageCard extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(12.0), // Adjust the radius as needed
+              borderRadius:
+                  BorderRadius.circular(12.0), // Adjust the radius as needed
               child: Image.asset(
                 imageUrl,
                 fit: BoxFit.cover,
               ),
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: Text(
                 title,
-                style: const TextStyle(fontSize: 20,fontWeight: FontWeight.w500),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ).frosted(
                 blur: 3,
-                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                borderRadius:
+                    const BorderRadius.vertical(bottom: Radius.circular(10)),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
               ),
             )
           ],

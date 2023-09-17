@@ -4,21 +4,22 @@ class HeartRateCard extends StatelessWidget {
   final String date;
   final int heartRate;
 
-  const HeartRateCard({super.key,
+  const HeartRateCard({
+    super.key,
     required this.date,
     required this.heartRate,
   });
 
   @override
   Widget build(BuildContext context) {
-    MaterialColor color = Colors.green ;
+    MaterialColor color = Colors.green;
     String text = 'NORMAL';
-    if( heartRate > 100){
+    if (heartRate > 100) {
       text = 'CEPAT';
-      color = Colors.red ;
+      color = Colors.red;
     } else if (heartRate < 60) {
       text = 'LAMBAT';
-      color = Colors.blue ;
+      color = Colors.blue;
     }
     return Card(
       color: Colors.teal.shade50,
@@ -56,7 +57,7 @@ class HeartRateCard extends StatelessWidget {
                 const SizedBox(
                   width: 5,
                 ),
-               Column(
+                Column(
                   children: [
                     Icon(
                       Icons.favorite,
@@ -69,7 +70,8 @@ class HeartRateCard extends StatelessWidget {
               ],
             ),
             Text(text,
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,color: color)),
+                style: TextStyle(
+                    fontSize: 25, fontWeight: FontWeight.bold, color: color)),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 10.0),
               width: 300,
@@ -89,7 +91,8 @@ class HeartRateCard extends StatelessWidget {
               ),
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  double containerWidth = 300 * (heartRate / 120); // Adjust as needed
+                  double containerWidth =
+                      300 * (heartRate / 120); // Adjust as needed
                   return Stack(
                     children: [
                       Positioned(

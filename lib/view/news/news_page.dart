@@ -1,18 +1,10 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:cardia_watch/view/connect_page.dart';
-import 'package:cardia_watch/view/settings_page.dart';
-import 'package:cardia_watch/view/widgets/heart_rate_card.dart';
 import 'package:cardia_watch/view/widgets/rounded_image_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
 import 'package:get/get.dart';
-import '../controller/home_page_controller.dart';
-import 'package:fl_chart/fl_chart.dart';
 
-import '../controller/news_page_controller.dart';
-import 'history_page.dart';
-import 'home_page.dart';
+import '../../controller/news_page_controller.dart';
+import '../home_page.dart';
 import 'news_detail_page.dart';
 
 class NewsPage extends GetView<NewsPageController> {
@@ -22,7 +14,8 @@ class NewsPage extends GetView<NewsPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Artikel", style: TextStyle(color: Colors.teal, fontWeight: FontWeight.bold)),
+        title: const Text("Artikel",
+            style: TextStyle(color: Colors.teal, fontWeight: FontWeight.bold)),
         centerTitle: true,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
@@ -33,14 +26,14 @@ class NewsPage extends GetView<NewsPageController> {
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
             child: Obx(() => ListView.builder(
                 itemCount: controller.listData.length,
-                itemBuilder: (c,i) {
+                itemBuilder: (c, i) {
                   return RoundedImageCard(
                     imageUrl: controller.listData[i]['imageUrl'],
                     title: controller.listData[i]['title'],
-                    onTap: () => Get.to(() => NewsDetailPage(controller.listData[i])),
+                    onTap: () =>
+                        Get.to(() => NewsDetailPage(controller.listData[i])),
                   );
-                }))
-        ),
+                }))),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => const HomePage()),
@@ -48,13 +41,14 @@ class NewsPage extends GetView<NewsPageController> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: controller.iconList,
-        activeIndex: 0,
+        icons: controller.utilService.iconList,
+        activeColor: Colors.teal,
+        activeIndex: 1,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.defaultEdge,
         leftCornerRadius: 15,
         rightCornerRadius: 15,
-        onTap: (index) => index == 0 ? Get.to(() => const HistoryPage()) : Get.to(() => const NewsPage()),
+        onTap: (index) => Get.toNamed((controller.utilService.pageList[index])),
       ),
     );
   }

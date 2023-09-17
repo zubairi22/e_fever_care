@@ -38,7 +38,8 @@ LineChartData lineData(List<FlSpot> heartRateSpots) {
       show: true,
       border: Border.all(color: Colors.blueGrey),
     ),
-    lineTouchData: const LineTouchData(touchTooltipData: LineTouchTooltipData(tooltipBgColor: Colors.white)),
+    lineTouchData: const LineTouchData(
+        touchTooltipData: LineTouchTooltipData(tooltipBgColor: Colors.white)),
     lineBarsData: [
       LineChartBarData(
         spots: heartRateSpots,
@@ -54,7 +55,10 @@ LineChartData lineData(List<FlSpot> heartRateSpots) {
         belowBarData: BarAreaData(
           show: true,
           gradient: LinearGradient(
-            colors: [Colors.teal.withOpacity(0.4), Colors.blue.withOpacity(0.4)],
+            colors: [
+              Colors.teal.withOpacity(0.4),
+              Colors.blue.withOpacity(0.4)
+            ],
           ),
         ),
       ),

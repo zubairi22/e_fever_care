@@ -1,9 +1,8 @@
 import 'dart:async';
+
 import 'package:cardia_watch/view/home_page.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -19,8 +18,8 @@ class VideoState extends State<Splash> with SingleTickerProviderStateMixin {
   late Animation<double> animation;
 
   startTime() async {
-    var _duration = const Duration(seconds: 2);
-    return Timer(_duration, navigationPage);
+    var duration = const Duration(seconds: 2);
+    return Timer(duration, navigationPage);
   }
 
   void navigationPage() {
