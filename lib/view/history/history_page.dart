@@ -41,7 +41,7 @@ class HistoryPage extends GetView<HistoryPageController> {
                             icon: const Icon(Icons.navigate_before),
                             color: Colors.teal,
                             onPressed: () {
-                              if (controller.listLength.value > 1) {
+                              if (controller.listLength.value > 0) {
                                 controller.listLength.value--;
                                 controller.getHeartRateHistory(controller
                                     .listKeys[controller.listLength.value]);
@@ -51,19 +51,15 @@ class HistoryPage extends GetView<HistoryPageController> {
                           Text(
                               controller.listKeys.isNotEmpty
                                   ? controller
-                                      .listKeys[controller.listLength.value - 1]
-                                      .toString()
-                                      .substring(0, 10)
-                                  : controller.dateYesterday
-                                      .toString()
-                                      .substring(0, 10),
+                                      .listKeys[controller.listLength.value]
+                                  : controller.dateYesterday,
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w700)),
                           IconButton(
                             icon: const Icon(Icons.navigate_next),
                             color: Colors.teal,
                             onPressed: () {
-                              if (controller.listLength.value < controller.listKeys.length) {
+                              if (controller.listLength.value < controller.listKeys.length - 1) {
                                 controller.listLength.value++;
                                 controller.getHeartRateHistory(controller
                                     .listKeys[controller.listLength.value]);
@@ -73,29 +69,29 @@ class HistoryPage extends GetView<HistoryPageController> {
                         ],
                       ))),
             ),
-            Obx(() => Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0)),
-                  color: Colors.teal.shade50,
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    children: [
-                      AspectRatio(
-                        aspectRatio: 0.8,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            right: 22,
-                            left: 16,
-                            top: 24,
-                            bottom: 12,
-                          ),
-                          child: LineChart(
-                              lineData(controller.dayHeartRateSpots)),
-                        ),
+            Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0)),
+              color: Colors.teal.shade50,
+              margin: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 0.8,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 22,
+                        left: 16,
+                        top: 24,
+                        bottom: 12,
                       ),
-                    ],
+                      child: Obx(() => LineChart(
+                          lineData(controller.dayHeartRateSpots))),
+                    ),
                   ),
-                )),
+                ],
+              ),
+            ),
             Obx(() => Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0)),

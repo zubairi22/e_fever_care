@@ -29,6 +29,7 @@ class HistoryPageController extends GetxController {
 
   @override
   Future<void> onInit() async {
+    dayHeartRateSpots.value = utilService.chartData(List.filled(24, 0.0));
     await getData();
     getHeartRateHistory(dateYesterday);
     super.onInit();
@@ -49,17 +50,17 @@ class HistoryPageController extends GetxController {
       if (response.statusCode == 200) {
         listData = response.body['vitalSign'];
         listKeys.value = listData.keys.toList().reversed.toList();
-        listLength.value = listData.keys.toList().length;
+        listLength.value = listData.keys.toList().length - 1;
       }
     });
   }
 
   Future<void> getHeartRateHistory(String historyDate) async {
-    if(listData.containsKey(dateYesterday)) {
+    if(listData.containsKey(historyDate)) {
       var heartRate = List.filled(24, 0.0);
       for (var i = 0; i < heartRate.length; i++) {
-        if(listData[dateYesterday].containsKey(i.toString())) {
-          heartRate[i] = listData[dateYesterday][i.toString()].toDouble();
+        if( listData[historyDate].containsKey(i.toString())) {
+          heartRate[i] = listData[historyDate][i.toString()].toDouble();
         }
       }
       dayHeartRateSpots.value = utilService.chartData(heartRate);

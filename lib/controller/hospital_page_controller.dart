@@ -36,7 +36,7 @@ class HospitalPageController extends GetxController {
     }
     final connect = GetConnect();
     await connect.post(
-        'http://192.168.93.138:8000/api/hospital',
+        '${utilService.url}/api/hospital',
         {
           'latitude' : latitude.toString(),
           'longitude' : longitude.toString(),

@@ -10,14 +10,13 @@ class HomePageController extends GetxController {
   final UtilService utilService = UtilService();
   final date = ''.obs;
   final heartRate = 0.obs;
-  final todayHeartRate = <Map<dynamic, dynamic>>[].obs;
   final heartRateSpots = <FlSpot>[].obs;
   final isConnected = false.obs;
-  final deviceId = ''.obs;
   late StreamSubscription scanStream;
 
   @override
   void onInit() {
+    heartRateSpots.value = utilService.chartData(List.filled(24, 0.0));
     checkDevice();
     getHeartRate();
     super.onInit();
@@ -81,11 +80,10 @@ class HomePageController extends GetxController {
       if (Hive.isBoxOpen('heartRateHistory')) {
         var boxHistory = await Hive.openBox('heartRateHistory');
         populateData(box, boxHistory);
-        refresh();
+        update();
 
         box.watch().listen((e) {
           populateData(box, boxHistory);
-          refresh();
         });
       }
     }
@@ -106,3 +104,4 @@ class HomePageController extends GetxController {
     }
   }
 }
+

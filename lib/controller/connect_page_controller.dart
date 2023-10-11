@@ -29,6 +29,7 @@ class ConnectPageController extends GetxController {
                     'heartRate': valueOld,
                   });
                   postHeartRate(valueOld);
+                  saveHistoryToHive(valueOld);
                   valueOld = 1;
                 }
               } else {

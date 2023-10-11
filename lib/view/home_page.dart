@@ -51,23 +51,22 @@ class HomePage extends GetView<HomePageController> {
                     ],
                   )),
             ),
-            Obx(() => Card(
-                  color: Colors.teal.shade50,
-                  margin: const EdgeInsets.all(20.0),
-                  child: AspectRatio(
-                    aspectRatio: 1.50,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 18,
-                        left: 12,
-                        top: 24,
-                        bottom: 12,
-                      ),
-                      child:
-                          LineChart(lineData(controller.heartRateSpots)),
-                    ),
+            Card(
+              color: Colors.teal.shade50,
+              margin: const EdgeInsets.all(20.0),
+              child: AspectRatio(
+                aspectRatio: 1.50,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: 18,
+                    left: 12,
+                    top: 24,
+                    bottom: 12,
                   ),
-                )),
+                  child: Obx(() => LineChart(lineData(controller.heartRateSpots))),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -88,3 +87,4 @@ class HomePage extends GetView<HomePageController> {
     );
   }
 }
+
