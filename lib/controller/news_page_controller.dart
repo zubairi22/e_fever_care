@@ -2,22 +2,36 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
 import '../service/utils_service.dart';
 
 class NewsPageController extends GetxController {
   final UtilService utilService = UtilService();
   final listData = [].obs;
+  final token = ''.obs;
 
   @override
-  void onReady() {
-    readJson();
+  void onInit() {
+    newsPost();
     super.onInit();
   }
 
-  Future<void> readJson() async {
-    final String response = await rootBundle.loadString('assets/article.json');
-    final jsonMap = json.decode(response);
-    listData.value = jsonMap['data'];
+  newsPost() async {
+    if (Hive.isBoxOpen('token')) {
+      var box = await Hive.openBox('token');
+      token.value = box.getAt(0);
+    }
+    final connect = GetConnect();
+    await connect.get(
+        'http://192.168.93.138:8000/api/article',
+        headers: {
+          'Authorization': 'Bearer $token'
+        }
+    ).then((response) async {
+      if(response.statusCode == 200) {
+        listData.value = response.body['article']['data'];
+      }
+    });
   }
 }

@@ -21,8 +21,8 @@ class RoundedImageCard extends StatelessWidget {
             ClipRRect(
               borderRadius:
                   BorderRadius.circular(12.0), // Adjust the radius as needed
-              child: Image.asset(
-                imageUrl,
+              child: Image.network(
+                'http://192.168.22.186:8000/storage/$imageUrl',
                 fit: BoxFit.cover,
               ),
             ),

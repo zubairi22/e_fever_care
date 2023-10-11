@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../controller/connect_page_controller.dart';
 import '../controller/history_page_controller.dart';
 import '../controller/hospital_page_controller.dart';
+import '../controller/login_page_controller.dart';
 import '../controller/news_page_controller.dart';
 import '../controller/settings_page_controller.dart';
 
@@ -17,6 +18,7 @@ class MainBindings extends Bindings {
     Get.lazyPut(() => NewsPageController());
     Get.lazyPut(() => SettingsPageController());
     Get.lazyPut(() => HospitalPageController());
+    Get.lazyPut(() => LoginPageController());
     Get.lazyPut(() => UtilService());
   }
 }

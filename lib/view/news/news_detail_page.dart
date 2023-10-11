@@ -22,33 +22,31 @@ class NewsDetailPage extends GetView<NewsPageController> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        12.0), // Adjust the radius as needed
-                    child: Image.asset(
-                      listData['imageUrl'],
-                      fit: BoxFit.cover,
-                    ),
+      body: SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                      12.0), // Adjust the radius as needed
+                  child: Image.network(
+                    'http://192.168.22.186:8000/storage/${listData['image']}',
+                    fit: BoxFit.cover,
                   ),
-                  const SizedBox(height: 10),
-                  Text(listData['title'],
-                      style:
-                          const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 7),
-                  Text(
-                    listData['description'],
-                    textAlign: TextAlign.justify,
-                  ),
-                ],
-              )),
-        ),
+                ),
+                const SizedBox(height: 10),
+                Text(listData['title'],
+                    style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+                const SizedBox(height: 7),
+                Text(
+                  listData['description'],
+                  textAlign: TextAlign.justify,
+                ),
+              ],
+            )),
       ),
     );
   }

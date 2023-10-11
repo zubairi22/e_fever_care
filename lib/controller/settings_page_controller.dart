@@ -1,24 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
 import '../service/utils_service.dart';
+import '../view/login_page.dart';
 
 class SettingsPageController extends GetxController {
   final UtilService utilService = UtilService();
-  final TextEditingController nameController = TextEditingController();
   final isConnect = false.obs;
-
-  final age = 18.obs;
-  final height = 170.obs;
-  final weight = 60.obs;
+  final name = 'Guest'.obs;
+  final age = '18'.obs;
+  final height = '170'.obs;
+  final weight = '60'.obs;
   final gender = 'Laki-Laki'.obs;
-  final ageList = [].obs;
-  final heightList = [].obs;
-  final weightList = [].obs;
-  final genderList = [
-    'Laki-Laki' , 'Perempuan'
-  ].obs;
+  // final ageList = [].obs;
+  // final heightList = [].obs;
+  // final weightList = [].obs;
+  // final genderList = [
+  //   'Laki-Laki' , 'Perempuan'
+  // ].obs;
 
   @override
   void onInit() {
@@ -29,29 +30,49 @@ class SettingsPageController extends GetxController {
   @override
   void onReady() {
     checkConnect();
-    super.onReady();
+    super.onInit();
   }
-
-  void populateData (){
-    nameController.text = "Guest";
-
-    if(ageList.isEmpty){
-      for (int i = 1; i < 100; i++) {
-        ageList.add(i);
-      }
-
-      for (int i = 100; i < 300; i++) {
-        heightList.add(i);
-      }
-
-      for (int i = 0; i < 100; i++) {
-        weightList.add(i);
-      }
-    }
-}
 
   Future<void> checkConnect() async {
     final connected = await FlutterBluePlus.connectedSystemDevices;
     isConnect.value = connected.isNotEmpty;
+  }
+
+  Future<void> populateData () async {
+    // if(ageList.isEmpty){
+    //   for (int i = 1; i < 100; i++) {
+    //     ageList.add(i);
+    //   }
+    //
+    //   for (int i = 100; i < 300; i++) {
+    //     heightList.add(i);
+    //   }
+    //
+    //   for (int i = 0; i < 100; i++) {
+    //     weightList.add(i);
+    //   }
+    // }
+
+    if (Hive.isBoxOpen('user')) {
+      var box = await Hive.openBox('user');
+      var value = box.getAt(0);
+      name.value = value['name'];
+      age.value = value['age'];
+      height.value = value['height'];
+      weight.value = value['weight'];
+      gender.value = value['sex'];
+    }
+  }
+  
+  Future<void> logout () async {
+    if (Hive.isBoxOpen('token')) {
+      var box = await Hive.openBox('token');
+      box.clear();
+    }
+    if (Hive.isBoxOpen('user')) {
+      var box = await Hive.openBox('user');
+      box.clear();
+    }
+    Get.to(() => const LoginPage());
   }
 }

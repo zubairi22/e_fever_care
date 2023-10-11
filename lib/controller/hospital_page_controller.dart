@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
@@ -18,61 +19,36 @@ class HospitalPageController extends GetxController {
   final latitude = 0.0.obs;
   final longitude = 0.0.obs;
   final listData = [].obs;
+  final token = ''.obs;
 
   final markers = <Marker>[].obs;
 
   @override
-  void onInit() {
-    readJson();
+  void onInit() async {
+    await getLocation();
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    getLocation();
-    super.onReady();
-  }
-
-  Future<void> readJson() async {
-    final List<double> distances = [];
-    final String response = await rootBundle.loadString('assets/hospital.json');
-    final jsonMap = json.decode(response);
-
-    listData.value = jsonMap['data'];
-    for (var e in listData) {
-      double hLatitude = double.tryParse(e['latitude'].trim()) ?? 0.0;
-      double hLongitude = double.tryParse(e['longitude'].trim()) ?? 0.0;
-      final distance = await calculateDistance(latitude.value, longitude.value, hLatitude, hLongitude);
-      distances.add(distance);
+  hospitalPost() async {
+    if (Hive.isBoxOpen('token')) {
+      var box = await Hive.openBox('token');
+      token.value = box.getAt(0);
     }
-
-    for (int i = 0; i < listData.length - 1; i++) {
-      for (int j = i + 1; j < listData.length; j++) {
-        if (distances[i] < distances[j]) {
-          final tempDistance = distances[i];
-          distances[i] = distances[j];
-          distances[j] = tempDistance;
-
-          final tempHospital = listData[i];
-          listData[i] = listData[j];
-          listData[j] = tempHospital;
+    final connect = GetConnect();
+    await connect.post(
+        'http://192.168.93.138:8000/api/hospital',
+        {
+          'latitude' : latitude.toString(),
+          'longitude' : longitude.toString(),
+        },
+        headers: {
+          'Authorization': 'Bearer $token'
         }
+    ).then((response) async {
+      if(response.statusCode == 200) {
+        listData.value = response.body['hospital'];
       }
-    }
-  }
-
-  Future<double> calculateDistance(double userLat, double userLong, double hospitalLat, double hospitalLong) async {
-    final userLocation = LocationData.fromMap({'latitude': userLat, 'longitude': userLong});
-    final hospitalLocation = LocationData.fromMap({'latitude': hospitalLat, 'longitude': hospitalLong});
-
-    final distance = Geolocator.distanceBetween(
-      userLocation.latitude!,
-      userLocation.longitude!,
-      hospitalLocation.latitude!,
-      hospitalLocation.longitude!,
-    );
-
-    return distance;
+    });
   }
 
   Future<void> getLocation() async {
@@ -92,6 +68,8 @@ class HospitalPageController extends GetxController {
         ),
       ),
     );
+
+    hospitalPost();
 
     mapController.move(LatLng(latitude.value, longitude.value), 15.0);
   }

@@ -1,8 +1,11 @@
 import 'dart:async';
 
-import 'package:cardia_watch/view/home_page.dart';
+import 'package:cardia_watch/view/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+
+import 'home_page.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -22,8 +25,18 @@ class VideoState extends State<Splash> with SingleTickerProviderStateMixin {
     return Timer(duration, navigationPage);
   }
 
-  void navigationPage() {
-    Get.to(() => const HomePage());
+  Future<void> navigationPage() async {
+    if (Hive.isBoxOpen('user')) {
+      var box = await Hive.openBox('user');
+      if(box.isNotEmpty) {
+        Get.to(() => const HomePage());
+      } else {
+        Get.to(() => const LoginPage());
+      }
+    } else {
+      Get.to(() => const LoginPage());
+    }
+
   }
 
   @override

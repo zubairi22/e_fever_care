@@ -6,10 +6,10 @@ import 'package:hive/hive.dart';
 
 class ConnectPageController extends GetxController {
   late StreamSubscription serviceStream;
-  DateTime dateToday =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime dateToday = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-  void setupHeartRateNotifications(List<BluetoothService> services) {
+  void setupHeartRateNotifications(List<BluetoothService> services) async {
+
     int valueOld = 1;
     for (var service in services) {
       if (service.uuid == Guid('0000180d-0000-1000-8000-00805f9b34fb')) {
@@ -25,7 +25,7 @@ class ConnectPageController extends GetxController {
                     'date': DateTime.now().toString(),
                     'heartRate': valueOld,
                   });
-                  saveHistoryToHive(valueOld);
+                  postHeartRate(valueOld);
                   valueOld = 1;
                 }
               } else {
@@ -43,8 +43,7 @@ class ConnectPageController extends GetxController {
       var box = await Hive.openBox('heartRateData');
       if (box.isNotEmpty) {
         final value = box.getAt(box.length - 1);
-        final itemDate =
-            DateTime.parse(value['date'].toString().substring(0, 10));
+        final itemDate = DateTime.parse(value['date'].toString().substring(0, 10));
         if (itemDate.isBefore(dateToday)) {
           await box.clear();
         }
@@ -79,4 +78,22 @@ class ConnectPageController extends GetxController {
       await box.put('deviceId', data);
     }
   }
+
+  Future<void> postHeartRate(int data) async {
+    final connect = GetConnect();
+    if (Hive.isBoxOpen('token')) {
+      var box = await Hive.openBox('token');
+      await connect.post(
+          'http://192.168.93.138:8000/api/vital',
+          {
+            'heart_rate' : data,
+          },
+          headers: {
+            'Authorization' : 'Bearer ${box.getAt(0)}'
+          }
+      );
+    }
+
+  }
 }
+

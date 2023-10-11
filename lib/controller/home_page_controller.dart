@@ -19,21 +19,15 @@ class HomePageController extends GetxController {
   @override
   void onInit() {
     checkDevice();
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
     getHeartRate();
-    super.onReady();
+    super.onInit();
   }
 
   Future<void> checkDevice() async {
     int valueOld = 1;
     if (Hive.isBoxOpen('deviceData')) {
       var box = await Hive.openBox('deviceData');
-      var isOn =
-          await FlutterBluePlus.adapterState.first == BluetoothAdapterState.on;
+      var isOn = await FlutterBluePlus.adapterState.first == BluetoothAdapterState.on;
       if (box.isNotEmpty && isOn) {
         await FlutterBluePlus.startScan(
             timeout: const Duration(seconds: 30),
@@ -86,14 +80,11 @@ class HomePageController extends GetxController {
       var box = await Hive.openBox('heartRateData');
       if (Hive.isBoxOpen('heartRateHistory')) {
         var boxHistory = await Hive.openBox('heartRateHistory');
+        populateData(box, boxHistory);
 
         box.watch().listen((e) {
           populateData(box, boxHistory);
-          update();
         });
-
-        populateData(box, boxHistory);
-        update();
       }
     }
   }

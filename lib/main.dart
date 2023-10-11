@@ -11,12 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:cardia_watch/controller/connect_page_controller.dart';
 
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox('heartRateData');
   await Hive.openBox('heartRateHistory');
   await Hive.openBox('deviceData');
+  await Hive.openBox('user');
+  await Hive.openBox('token');
 
   if (Platform.isAndroid) {
     WidgetsFlutterBinding.ensureInitialized();

@@ -28,7 +28,7 @@ class NewsPage extends GetView<NewsPageController> {
                 itemCount: controller.listData.length,
                 itemBuilder: (c, i) {
                   return RoundedImageCard(
-                    imageUrl: controller.listData[i]['imageUrl'],
+                    imageUrl: controller.listData[i]['image'],
                     title: controller.listData[i]['title'],
                     onTap: () =>
                         Get.to(() => NewsDetailPage(controller.listData[i])),

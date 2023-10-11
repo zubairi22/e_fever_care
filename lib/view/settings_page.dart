@@ -31,95 +31,27 @@ class SettingsPage extends GetView<SettingsPageController> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.person_pin_rounded),
                 title: const Text('Username'),
-                trailing: SizedBox(
-                  width: 100,
-                  child: TextField(
-                      controller: controller.nameController,
-                      textAlign: TextAlign.end,
-                      onSubmitted: ((value) {
-                        controller.nameController.text = value;
-                      })),
-                ),
+                trailing: Text(controller.name.value),
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.person),
                 title: const Text('Umur'),
-                trailing: SizedBox(
-                  width: 40,
-                  child: Obx(() => DropdownButton(
-                    value: controller.age.value,
-                    menuMaxHeight: 300,
-                    items: controller.ageList
-                        .map((value) => DropdownMenuItem(
-                      value: value,
-                      child: Text("$value"),
-                    ))
-                        .toList(),
-                    onChanged: (value) {
-                      controller.age.value = value as int;
-                    },
-                  )),
-                ),
+                trailing: Text(controller.age.value),
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.height),
                 title: const Text('Tinggi'),
-                trailing: SizedBox(
-                  width: 69,
-                  child: Obx(() => DropdownButton(
-                    value: controller.height.value,
-                    menuMaxHeight: 300,
-                    items: controller.heightList
-                        .map((value) => DropdownMenuItem(
-                      value: value,
-                      child: Text("$value cm"),
-                    ))
-                        .toList(),
-                    onChanged: (value) {
-                      controller.height.value = value as int;
-                    },
-                  )),
-                ),
+                trailing: Text(controller.height.value),
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.monitor_weight),
                 title: const Text('Berat'),
-                trailing: SizedBox(
-                  width: 59,
-                  child: Obx(() => DropdownButton(
-                    value: controller.weight.value,
-                    menuMaxHeight: 300,
-                    items: controller.weightList
-                        .map((value) => DropdownMenuItem(
-                      value: value,
-                      child: Text("$value kg"),
-                    ))
-                        .toList(),
-                    onChanged: (value) {
-                      controller.weight.value = value as int;
-                    },
-                  )),
-                ),
+                trailing: Text(controller.weight.value),
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.male),
                 title: const Text('Jenis Kelamin'),
-                trailing: SizedBox(
-                  width: 96,
-                  child: Obx(() => DropdownButton(
-                    value: controller.gender.value,
-                    menuMaxHeight: 300,
-                    items: controller.genderList
-                        .map((value) => DropdownMenuItem(
-                      value: value,
-                      child: Text("$value"),
-                    ))
-                        .toList(),
-                    onChanged: (value) {
-                      controller.gender.value = value as String;
-                    },
-                  )),
-                ),
+                trailing: Text(controller.gender.value),
               ),
             ],
           ),
@@ -145,7 +77,7 @@ class SettingsPage extends GetView<SettingsPageController> {
                 leading: const Icon(Icons.logout),
                 title: const Text('Logout'),
                 onPressed: (c) {
-
+                  controller.logout();
                 },
               ),
             ],
