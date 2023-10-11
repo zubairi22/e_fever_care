@@ -19,6 +19,8 @@ class UtilService {
     'setting',
   ];
 
+  final url = 'http://192.168.22.186:8000';
+
   List<FlSpot> chartData(List<double> data) {
     return data
         .asMap()
@@ -28,7 +30,6 @@ class UtilService {
           final y = entry.value.toDouble();
           return FlSpot(x, y);
         })
-        .toList()
-        .obs;
+        .toList();
   }
 }

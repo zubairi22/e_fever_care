@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 
 import '../service/utils_service.dart';
 
@@ -11,8 +12,10 @@ class HistoryPageController extends GetxController {
   final maxToday = 0.obs;
   final minToday = 0.obs;
   final averageToday = 0.obs;
-  final daysInMonth = <DateTime>[].obs;
-  final daysLength = 0.obs;
+  final token = ''.obs;
+  final listKeys = [].obs;
+  final listLength = 0.obs;
+  var listData = {};
 
   final iconList = <IconData>[
     Icons.bar_chart,
@@ -21,58 +24,47 @@ class HistoryPageController extends GetxController {
     Icons.settings
   ];
 
-  DateTime dateYesterday = DateTime(
-      DateTime.now().year, DateTime.now().month, DateTime.now().day);
-
-  DateTime dateFirst = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  String dateYesterday = DateFormat('yyyy-MM-dd').format(DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day - 1));
 
   @override
-  void onInit() {
-    getDaysInBetween(dateFirst, dateYesterday);
+  Future<void> onInit() async {
+    await getData();
+    getHeartRateHistory(dateYesterday);
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    getHeartRateHistory(dateYesterday);
-    super.onReady();
-  }
-
-  void getDaysInBetween(DateTime startDate, DateTime endDate) {
-    List<DateTime> days = [];
-    for (int i = 0; i <= endDate.difference(startDate).inDays; i++) {
-      days.add(startDate.add(Duration(days: i)));
+  Future<void> getData () async {
+    if (Hive.isBoxOpen('token')) {
+      var box = await Hive.openBox('token');
+      token.value = box.getAt(0);
     }
-    daysInMonth.value = days;
-    daysLength.value = days.length - 1;
+    final connect = GetConnect();
+    await connect.get(
+        '${utilService.url}/api/vital-history',
+        headers: {
+          'Authorization': 'Bearer $token'
+        }
+    ).then((response) async {
+      if (response.statusCode == 200) {
+        listData = response.body['vitalSign'];
+        listKeys.value = listData.keys.toList().reversed.toList();
+        listLength.value = listData.keys.toList().length;
+      }
+    });
   }
 
-  Future<void> getHeartRateHistory(DateTime? historyDate) async {
-    if (Hive.isBoxOpen('heartRateHistory')) {
-      var box = await Hive.openBox('heartRateHistory');
-      if (box.isNotEmpty) {
-        final List<double> value = box.get(historyDate.toString()) ?? [];
-        if (value.isNotEmpty) {
-          var nonZero = value.where((value) => value != 0).toList();
-
-          maxToday.value = value
-              .reduce((value, element) => value > element ? value : element)
-              .toInt();
-          minToday.value = nonZero
-              .reduce((value, element) => value < element ? value : element)
-              .toInt();
-          double sum =
-              nonZero.fold(0, (previous, current) => previous + current);
-          averageToday.value = sum ~/ nonZero.length;
-          dayHeartRateSpots.value = utilService.chartData(value);
-        } else {
-          maxToday.value = 0;
-          minToday.value = 0;
-          averageToday.value = 0;
-          dayHeartRateSpots.value = utilService.chartData([]);
+  Future<void> getHeartRateHistory(String historyDate) async {
+    if(listData.containsKey(dateYesterday)) {
+      var heartRate = List.filled(24, 0.0);
+      for (var i = 0; i < heartRate.length; i++) {
+        if(listData[dateYesterday].containsKey(i.toString())) {
+          heartRate[i] = listData[dateYesterday][i.toString()].toDouble();
         }
       }
-      update();
+      dayHeartRateSpots.value = utilService.chartData(heartRate);
+    } else {
+      dayHeartRateSpots.value = utilService.chartData([]);
     }
   }
 }

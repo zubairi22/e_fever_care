@@ -29,7 +29,7 @@ class LoginPageController extends GetxController {
   loginPost(LoginData data) async {
     final connect = GetConnect();
     await connect.post(
-        'http://192.168.93.138:8000/api/auth',
+        '${utilService.url}/api/auth',
         {
           'email' : data.name,
           'password' : data.password

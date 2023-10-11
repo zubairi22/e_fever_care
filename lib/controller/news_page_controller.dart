@@ -24,7 +24,7 @@ class NewsPageController extends GetxController {
     }
     final connect = GetConnect();
     await connect.get(
-        'http://192.168.93.138:8000/api/article',
+        '${utilService.url}/api/article',
         headers: {
           'Authorization': 'Bearer $token'
         }

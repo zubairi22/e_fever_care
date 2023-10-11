@@ -81,9 +81,11 @@ class HomePageController extends GetxController {
       if (Hive.isBoxOpen('heartRateHistory')) {
         var boxHistory = await Hive.openBox('heartRateHistory');
         populateData(box, boxHistory);
+        refresh();
 
         box.watch().listen((e) {
           populateData(box, boxHistory);
+          refresh();
         });
       }
     }

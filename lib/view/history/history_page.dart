@@ -41,17 +41,17 @@ class HistoryPage extends GetView<HistoryPageController> {
                             icon: const Icon(Icons.navigate_before),
                             color: Colors.teal,
                             onPressed: () {
-                              if (controller.daysLength.value > 0) {
-                                controller.daysLength.value--;
+                              if (controller.listLength.value > 1) {
+                                controller.listLength.value--;
                                 controller.getHeartRateHistory(controller
-                                    .daysInMonth[controller.daysLength.value]);
+                                    .listKeys[controller.listLength.value]);
                               }
                             },
                           ),
                           Text(
-                              controller.daysInMonth.isNotEmpty
+                              controller.listKeys.isNotEmpty
                                   ? controller
-                                      .daysInMonth[controller.daysLength.value]
+                                      .listKeys[controller.listLength.value - 1]
                                       .toString()
                                       .substring(0, 10)
                                   : controller.dateYesterday
@@ -63,11 +63,10 @@ class HistoryPage extends GetView<HistoryPageController> {
                             icon: const Icon(Icons.navigate_next),
                             color: Colors.teal,
                             onPressed: () {
-                              if (controller.daysLength.value <
-                                  controller.daysInMonth.length - 1) {
-                                controller.daysLength.value++;
+                              if (controller.listLength.value < controller.listKeys.length) {
+                                controller.listLength.value++;
                                 controller.getHeartRateHistory(controller
-                                    .daysInMonth[controller.daysLength.value]);
+                                    .listKeys[controller.listLength.value]);
                               }
                             },
                           ),
