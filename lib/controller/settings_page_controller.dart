@@ -10,10 +10,10 @@ class SettingsPageController extends GetxController {
   final UtilService utilService = UtilService();
   final isConnect = false.obs;
   final name = 'Guest'.obs;
-  final age = '18'.obs;
-  final height = '170'.obs;
-  final weight = '60'.obs;
-  final gender = 'Laki-Laki'.obs;
+  final age = '-'.obs;
+  final height = '-'.obs;
+  final weight = '-'.obs;
+  final gender = '-'.obs;
   // final ageList = [].obs;
   // final heightList = [].obs;
   // final weightList = [].obs;
@@ -72,6 +72,18 @@ class SettingsPageController extends GetxController {
     if (Hive.isBoxOpen('user')) {
       var box = await Hive.openBox('user');
       box.clear();
+    }
+    if (Hive.isBoxOpen('deviceData')) {
+      var box = await Hive.openBox('deviceData');
+      box.clear();
+    }
+    if (Hive.isBoxOpen('heartRateData')) {
+      var box = await Hive.openBox('heartRateData');
+      await box.clear();
+    }
+    if (Hive.isBoxOpen('heartRateHistory')) {
+      var box = await Hive.openBox('heartRateHistory');
+      await box.clear();
     }
     Get.to(() => const LoginPage());
   }

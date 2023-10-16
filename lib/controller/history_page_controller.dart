@@ -9,9 +9,9 @@ import '../service/utils_service.dart';
 class HistoryPageController extends GetxController {
   final UtilService utilService = UtilService();
   final dayHeartRateSpots = <FlSpot>[].obs;
-  final maxToday = 0.obs;
-  final minToday = 0.obs;
-  final averageToday = 0.obs;
+  final maxToday = '0'.obs;
+  final minToday = '0'.obs;
+  final averageToday = '0'.obs;
   final token = ''.obs;
   final listKeys = [].obs;
   final listLength = 0.obs;
@@ -59,10 +59,13 @@ class HistoryPageController extends GetxController {
     if(listData.containsKey(historyDate)) {
       var heartRate = List.filled(24, 0.0);
       for (var i = 0; i < heartRate.length; i++) {
-        if( listData[historyDate].containsKey(i.toString())) {
-          heartRate[i] = listData[historyDate][i.toString()].toDouble();
+        if(listData[historyDate]['data'].containsKey(i.toString())) {
+          heartRate[i] = double.parse(listData[historyDate]['data'][i.toString()]);
         }
       }
+      maxToday.value = listData[historyDate]['max'];
+      minToday.value = listData[historyDate]['min'];
+      averageToday.value = listData[historyDate]['average'];
       dayHeartRateSpots.value = utilService.chartData(heartRate);
     } else {
       dayHeartRateSpots.value = utilService.chartData([]);

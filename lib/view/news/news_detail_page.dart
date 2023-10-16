@@ -32,7 +32,7 @@ class NewsDetailPage extends GetView<NewsPageController> {
                   borderRadius: BorderRadius.circular(
                       12.0), // Adjust the radius as needed
                   child: Image.network(
-                    'http://192.168.22.186:8000/storage/${listData['image']}',
+                    '${controller.utilService.url}/storage/${listData['image']}',
                     fit: BoxFit.cover,
                   ),
                 ),

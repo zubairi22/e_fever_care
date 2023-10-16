@@ -19,7 +19,7 @@ class UtilService {
     'setting',
   ];
 
-  final url = 'http://192.168.22.186:8000';
+  final url = 'http://timesynccardia.cloud';
 
   List<FlSpot> chartData(List<double> data) {
     return data

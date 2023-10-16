@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cardia_watch/service/utils_service.dart';
+import 'package:cardia_watch/view/connect/connect_page.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
@@ -15,11 +16,20 @@ class HomePageController extends GetxController {
   late StreamSubscription scanStream;
 
   @override
-  void onInit() {
+  void onInit() async {
     heartRateSpots.value = utilService.chartData(List.filled(24, 0.0));
-    checkDevice();
     getHeartRate();
+    await connectDevice();
     super.onInit();
+  }
+
+  Future<void> connectDevice() async {
+    if (Hive.isBoxOpen('deviceData')) {
+      var box = await Hive.openBox('deviceData');
+      if (box.isNotEmpty) {
+        Get.to(() => const ConnectPage());
+      }
+    }
   }
 
   Future<void> checkDevice() async {
@@ -33,7 +43,7 @@ class HomePageController extends GetxController {
             androidUsesFineLocation: false,
             withServices: [Guid('0000180d-0000-1000-8000-00805f9b34fb')]);
 
-        scanStream = FlutterBluePlus.scanResults.listen((sr) async {
+        FlutterBluePlus.scanResults.listen((sr) async {
           for (ScanResult r in sr) {
             if (r.device.remoteId.toString() == box.get('deviceId')) {
               r.device
@@ -63,8 +73,13 @@ class HomePageController extends GetxController {
                       }
                     });
                   });
+
+                  if (service.uuid == Guid('6e400001-b5a3-f393-e0a9-e50e24dcca9e')) {
+                    var characteristic = service.characteristics.firstWhere(
+                            (c) => c.uuid == Guid('6e400002-b5a3-f393-e0a9-e50e24dcca9e'));
+                    characteristic.write([1,12,1,10]);
+                  }
                 });
-                scanStream.cancel();
               });
             }
           }
@@ -84,6 +99,7 @@ class HomePageController extends GetxController {
 
         box.watch().listen((e) {
           populateData(box, boxHistory);
+          update();
         });
       }
     }
@@ -97,10 +113,11 @@ class HomePageController extends GetxController {
     }
 
     if (boxHistory.isNotEmpty) {
-      DateTime dateToday = DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day);
-      final value = boxHistory.get(dateToday.toString());
-      heartRateSpots.value = utilService.chartData(value);
+      DateTime dateToday = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      if(boxHistory.get(dateToday.toString()) != null) {
+        final value = boxHistory.get(dateToday.toString());
+        heartRateSpots.value = utilService.chartData(value);
+      }
     }
   }
 }

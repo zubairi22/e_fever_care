@@ -28,13 +28,14 @@ class NewsPage extends GetView<NewsPageController> {
                 itemCount: controller.listData.length,
                 itemBuilder: (c, i) {
                   return RoundedImageCard(
-                    imageUrl: controller.listData[i]['image'],
+                    imageUrl: '${controller.utilService.url}/storage/${controller.listData[i]['image']}',
                     title: controller.listData[i]['title'],
                     onTap: () =>
                         Get.to(() => NewsDetailPage(controller.listData[i])),
                   );
                 }))),
       ),
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => const HomePage()),
         child: const Icon(Icons.home),

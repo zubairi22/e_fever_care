@@ -111,7 +111,7 @@ class HistoryPage extends GetView<HistoryPageController> {
                             const SizedBox(width: 5),
                             Column(
                               children: [
-                                Text(controller.maxToday.toString(),
+                                Text(controller.maxToday.value,
                                     style: const TextStyle(fontSize: 18)),
                                 const Text('Tertinggi',
                                     style: TextStyle(fontSize: 12)),
@@ -126,7 +126,7 @@ class HistoryPage extends GetView<HistoryPageController> {
                             const SizedBox(width: 5),
                             Column(
                               children: [
-                                Text(controller.minToday.toString(),
+                                Text(controller.averageToday.value,
                                     style: const TextStyle(fontSize: 18)),
                                 const Text('Rata-Rata',
                                     style: TextStyle(fontSize: 12)),
@@ -141,7 +141,7 @@ class HistoryPage extends GetView<HistoryPageController> {
                             const SizedBox(width: 5),
                             Column(
                               children: [
-                                Text(controller.minToday.toString(),
+                                Text(controller.minToday.value,
                                     style: const TextStyle(fontSize: 18)),
                                 const Text('Terendah',
                                     style: TextStyle(fontSize: 12)),
@@ -156,6 +156,7 @@ class HistoryPage extends GetView<HistoryPageController> {
           ],
         ),
       ),
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => const HomePage()),
         child: const Icon(Icons.home),

@@ -298,10 +298,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_blue_plus
-      sha256: "6ffa505dd6ba40ebeafe4912d4e754d7476cd2556ba61e8a8665ca1f48a8344f"
+      sha256: "5fd6280d324fa3fa950064f56fbc8255fc4386a232ab023a3c95ce4e5af6d344"
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.0"
+    version: "1.17.5"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -732,10 +732,10 @@ packages:
     dependency: transitive
     description:
       name: permission_handler_platform_interface
-      sha256: f2343e9fa9c22ae4fd92d4732755bfe452214e7189afcc097380950cf567b4b2
+      sha256: "6760eb5ef34589224771010805bea6054ad28453906936f843a8cc4d3a55c4a4"
       url: "https://pub.dev"
     source: hosted
-    version: "3.11.5"
+    version: "3.12.0"
   permission_handler_windows:
     dependency: transitive
     description:

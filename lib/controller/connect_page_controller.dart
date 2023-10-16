@@ -12,9 +12,13 @@ class ConnectPageController extends GetxController {
   DateTime dateToday = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   void setupHeartRateNotifications(List<BluetoothService> services) async {
-
     int valueOld = 1;
     for (var service in services) {
+      // if (service.uuid == Guid('6e400001-b5a3-f393-e0a9-e50e24dcca9e')) {
+      //   var characteristic = service.characteristics.firstWhere(
+      //           (c) => c.uuid == Guid('6e400002-b5a3-f393-e0a9-e50e24dcca9e'));
+      //   characteristic.write([1,12,1,10]);
+      // }
       if (service.uuid == Guid('0000180d-0000-1000-8000-00805f9b34fb')) {
         var characteristic = service.characteristics.firstWhere(
             (c) => c.uuid == Guid('00002a37-0000-1000-8000-00805f9b34fb'));
@@ -62,11 +66,13 @@ class ConnectPageController extends GetxController {
       List<double> hourHeartRateAverage = List.filled(24, 0.0);
       int hour = DateTime.now().hour;
       if (box.isNotEmpty) {
-        List<double> value = box.get(dateToday.toString());
-        if (value[hour] == 0.0) {
+        if(box.get(dateToday.toString()) != null){
+          hourHeartRateAverage = box.get(dateToday.toString());
+        }
+        if (hourHeartRateAverage[hour] == 0.0) {
           hourHeartRateAverage[hour] = data.toDouble();
         } else {
-          hourHeartRateAverage[hour] = (data.toDouble() + value[hour]) / 2;
+          hourHeartRateAverage[hour] = (data.toDouble() + hourHeartRateAverage[hour]) / 2;
         }
       } else {
         hourHeartRateAverage[hour] = data.toDouble();

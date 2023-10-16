@@ -95,6 +95,7 @@ class HospitalPage extends GetView<HospitalPageController> {
           ],
         ),
       ),
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => const HomePage()),
         child: const Icon(Icons.home),

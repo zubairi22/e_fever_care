@@ -13,7 +13,7 @@ import 'package:hive/hive.dart';
 
 class LoginPageController extends GetxController {
   final UtilService utilService = UtilService();
-  Duration get loginTime => const Duration(milliseconds: 2000);
+  Duration get loginTime => const Duration(milliseconds: 5000);
   final isSuccess = false.obs;
 
   Future<String?> onLogin(LoginData data) {

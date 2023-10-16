@@ -21,9 +21,9 @@ class SettingsPage extends GetView<SettingsPageController> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: SettingsList(
+      body: Obx(() => SettingsList(
         lightTheme:
-            const SettingsThemeData(settingsListBackground: Colors.white),
+        const SettingsThemeData(settingsListBackground: Colors.white),
         sections: [
           SettingsSection(
             title: const Text('Informasi Akun'),
@@ -61,14 +61,14 @@ class SettingsPage extends GetView<SettingsPageController> {
               SettingsTile.navigation(
                 leading: const Icon(Icons.watch),
                 title: const Text('Status Koneksi'),
-                trailing: Obx(() => Row(
-                      children: [
-                        Text(controller.isConnect.value
-                            ? 'Terhubung'
-                            : 'Terputus'),
-                        const Icon(Icons.navigate_next)
-                      ],
-                    )),
+                trailing: Row(
+                  children: [
+                    Text(controller.isConnect.value
+                        ? 'Terhubung'
+                        : 'Terputus'),
+                    const Icon(Icons.navigate_next)
+                  ],
+                ),
                 onPressed: (c) {
                   Get.to(() => const ConnectPage());
                 },
@@ -83,7 +83,7 @@ class SettingsPage extends GetView<SettingsPageController> {
             ],
           ),
         ],
-      ),
+      )),
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => const HomePage()),

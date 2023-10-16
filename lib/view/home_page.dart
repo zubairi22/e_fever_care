@@ -70,6 +70,7 @@ class HomePage extends GetView<HomePageController> {
           ],
         ),
       ),
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => const HomePage()),
         child: const Icon(Icons.home),
