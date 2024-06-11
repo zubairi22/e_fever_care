@@ -1,14 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
-import 'package:cardia_watch/service/utils_service.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:e_fever_care/service/utils_service.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:hive/hive.dart';
 
 class LoginPageController extends GetxController {

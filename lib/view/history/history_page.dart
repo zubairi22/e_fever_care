@@ -1,11 +1,10 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:cardia_watch/view/widgets/line_chart_data.dart';
+import 'package:e_fever_care/view/widgets/line_chart_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../controller/history_page_controller.dart';
-import '../home_page.dart';
 
 class HistoryPage extends GetView<HistoryPageController> {
   const HistoryPage({Key? key}) : super(key: key);
@@ -106,13 +105,13 @@ class HistoryPage extends GetView<HistoryPageController> {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.favorite,
-                                color: Colors.red, size: 35),
+                            Icon(Icons.favorite,
+                                color: Colors.red, size: 8.w),
                             const SizedBox(width: 5),
                             Column(
                               children: [
                                 Text(controller.maxToday.value,
-                                    style: const TextStyle(fontSize: 18)),
+                                    style: TextStyle(fontSize: 16.sp)),
                                 const Text('Tertinggi',
                                     style: TextStyle(fontSize: 12)),
                               ],
@@ -121,13 +120,13 @@ class HistoryPage extends GetView<HistoryPageController> {
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.favorite,
-                                color: Colors.green, size: 35),
+                            Icon(Icons.favorite,
+                                color: Colors.green, size: 8.w),
                             const SizedBox(width: 5),
                             Column(
                               children: [
                                 Text(controller.averageToday.value,
-                                    style: const TextStyle(fontSize: 18)),
+                                    style: TextStyle(fontSize: 16.sp)),
                                 const Text('Rata-Rata',
                                     style: TextStyle(fontSize: 12)),
                               ],
@@ -136,13 +135,13 @@ class HistoryPage extends GetView<HistoryPageController> {
                         ),
                         Row(
                           children: [
-                            const Icon(Icons.favorite,
-                                color: Colors.blue, size: 35),
+                            Icon(Icons.favorite,
+                                color: Colors.blue, size: 8.w),
                             const SizedBox(width: 5),
                             Column(
                               children: [
                                 Text(controller.minToday.value,
-                                    style: const TextStyle(fontSize: 18)),
+                                    style: TextStyle(fontSize: 16.sp)),
                                 const Text('Terendah',
                                     style: TextStyle(fontSize: 12)),
                               ],
@@ -157,21 +156,6 @@ class HistoryPage extends GetView<HistoryPageController> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.to(() => const HomePage()),
-        child: const Icon(Icons.home),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: controller.utilService.iconList,
-        activeColor: Colors.teal,
-        activeIndex: 0,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.defaultEdge,
-        leftCornerRadius: 15,
-        rightCornerRadius: 15,
-        onTap: (index) => Get.toNamed((controller.utilService.pageList[index])),
-      ),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:cardia_watch/view/settings_page.dart';
-import 'package:cardia_watch/view/widgets/scan_result.dart';
+import 'package:e_fever_care/view/main_page.dart';
+import 'package:e_fever_care/view/widgets/scan_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
@@ -42,7 +42,7 @@ class FindDevicesScreen extends GetView<ConnectPageController> {
                 builder: (c, snapshot) => Column(
                   children: (snapshot.data ?? [])
                       .map((d) => ListTile(
-                            title: Text(d.localName),
+                            title: Text(d.platformName),
                             subtitle: Text(d.remoteId.toString()),
                             trailing: StreamBuilder<BluetoothConnectionState>(
                               stream: d.connectionState,
@@ -71,7 +71,10 @@ class FindDevicesScreen extends GetView<ConnectPageController> {
                                           icon: const Icon(
                                               Icons.verified_rounded, color: Colors.green),
                                         );
-                                        controller.serviceStream.cancel();
+
+                                        controller.heartRateStream.cancel();
+                                        controller.customStream.cancel();
+                                        controller.customSecondStream.cancel();
                                       });
                                     },
                                   );
@@ -95,11 +98,10 @@ class FindDevicesScreen extends GetView<ConnectPageController> {
                                       }).then((v) async {
                                         try {
                                           d.discoverServices().then((services) {
-                                            controller
-                                                .setupHeartRateNotifications(
-                                                    services);
-                                            controller.saveDeviceToHive(
-                                                d.remoteId.toString());
+                                            controller.setupHeartRateNotifications(services);
+                                            controller.setupCustomNotifications(services);
+
+                                            controller.saveDeviceToHive(d.remoteId.toString());
                                             Get.snackbar(
                                               "Success",
                                               "Koneksi berhasil",
@@ -117,7 +119,7 @@ class FindDevicesScreen extends GetView<ConnectPageController> {
                                           );
                                         }
                                       });
-                                      Get.to(() => const SettingsPage());
+                                      Get.to(() => const MainPage(), arguments: 3);
                                     },
                                   );
                                 }
@@ -152,10 +154,10 @@ class FindDevicesScreen extends GetView<ConnectPageController> {
                             }).then((v) async {
                               try {
                                 r.device.discoverServices().then((services) {
-                                  controller
-                                      .setupHeartRateNotifications(services);
-                                  controller.saveDeviceToHive(
-                                      r.device.remoteId.toString());
+                                  controller.setupHeartRateNotifications(services);
+                                  controller.setupCustomNotifications(services);
+
+                                  controller.saveDeviceToHive(r.device.remoteId.toString());
                                   Get.snackbar(
                                     "Success",
                                     "Koneksi berhasil",
@@ -172,7 +174,7 @@ class FindDevicesScreen extends GetView<ConnectPageController> {
                                 );
                               }
                             }).then((v) {
-                              Get.to(() => const SettingsPage());
+                              Get.to(() => const MainPage(), arguments: 3);
                             });
                           },
                         ),
@@ -225,8 +227,7 @@ class FindDevicesScreen extends GetView<ConnectPageController> {
                       icon: const Icon(Icons.error, color: Colors.red),
                     );
                   }
-                  controller
-                      .update(); // force refresh of connectedSystemDevices
+                  controller.update();
                 });
           }
         },

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:cardia_watch/service/utils_service.dart';
-import 'package:cardia_watch/view/connect/connect_page.dart';
+import 'package:e_fever_care/service/utils_service.dart';
+import 'package:e_fever_care/view/connect/connect_page.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';

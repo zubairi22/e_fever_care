@@ -1,4 +1,4 @@
-import 'package:cardia_watch/controller/connect_page_controller.dart';
+import 'package:e_fever_care/controller/connect_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';

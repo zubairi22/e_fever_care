@@ -1,9 +1,9 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:cardia_watch/view/widgets/heart_rate_card.dart';
-import 'package:cardia_watch/view/widgets/line_chart_data.dart';
+import 'package:e_fever_care/view/widgets/heart_rate_card.dart';
+import 'package:e_fever_care/view/widgets/line_chart_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../controller/home_page_controller.dart';
 
@@ -40,12 +40,12 @@ class HomePage extends GetView<HomePageController> {
                     side: const BorderSide(color: Colors.teal, width: 2),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Statistik Hari ini',
                           style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16.sp,
                               color: Colors.teal,
                               fontWeight: FontWeight.bold))
                     ],
@@ -71,20 +71,6 @@ class HomePage extends GetView<HomePageController> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.to(() => const HomePage()),
-        child: const Icon(Icons.home),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: controller.utilService.iconList,
-        activeIndex: 0,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.defaultEdge,
-        leftCornerRadius: 15,
-        rightCornerRadius: 15,
-        onTap: (index) => Get.toNamed((controller.utilService.pageList[index])),
-      ),
     );
   }
 }

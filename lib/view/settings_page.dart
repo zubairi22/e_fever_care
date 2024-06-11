@@ -1,11 +1,9 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:cardia_watch/view/connect/connect_page.dart';
+import 'package:e_fever_care/view/connect/connect_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../controller/settings_page_controller.dart';
-import 'home_page.dart';
 
 class SettingsPage extends GetView<SettingsPageController> {
   const SettingsPage({Key? key}) : super(key: key);
@@ -85,21 +83,6 @@ class SettingsPage extends GetView<SettingsPageController> {
         ],
       )),
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.to(() => const HomePage()),
-        child: const Icon(Icons.home),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: controller.utilService.iconList,
-        activeColor: Colors.teal,
-        activeIndex: 3,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.defaultEdge,
-        leftCornerRadius: 15,
-        rightCornerRadius: 15,
-        onTap: (index) => Get.toNamed((controller.utilService.pageList[index])),
-      ),
     );
   }
 }

@@ -1,11 +1,9 @@
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../controller/hospital_page_controller.dart';
-import '../home_page.dart';
 
 class HospitalPage extends GetView<HospitalPageController> {
   const HospitalPage({Key? key}) : super(key: key);
@@ -86,7 +84,6 @@ class HospitalPage extends GetView<HospitalPageController> {
                       onTap: () {
                         controller.moveLocation(
                             controller.listData[i]['latitude'], controller.listData[i]['longitude']);
-                        print('Tapped on ${controller.listData[i]}');
                       },
                     );
                   },
@@ -96,21 +93,6 @@ class HospitalPage extends GetView<HospitalPageController> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.to(() => const HomePage()),
-        child: const Icon(Icons.home),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        icons: controller.utilService.iconList,
-        activeColor: Colors.teal,
-        activeIndex: 2,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.defaultEdge,
-        leftCornerRadius: 15,
-        rightCornerRadius: 15,
-        onTap: (index) => Get.toNamed((controller.utilService.pageList[index])),
-      ),
     );
   }
 }
