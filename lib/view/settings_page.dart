@@ -32,24 +32,14 @@ class SettingsPage extends GetView<SettingsPageController> {
                 trailing: Text(controller.name.value),
               ),
               SettingsTile.navigation(
-                leading: const Icon(Icons.person),
-                title: const Text('Umur'),
-                trailing: Text(controller.age.value),
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.height),
-                title: const Text('Tinggi'),
-                trailing: Text(controller.height.value),
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.monitor_weight),
-                title: const Text('Berat'),
-                trailing: Text(controller.weight.value),
-              ),
-              SettingsTile.navigation(
                 leading: const Icon(Icons.male),
                 title: const Text('Jenis Kelamin'),
                 trailing: Text(controller.gender.value),
+              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.date_range),
+                title: const Text('Tanggal Lahir'),
+                trailing: Text(controller.dateOfBirth.value),
               ),
             ],
           ),

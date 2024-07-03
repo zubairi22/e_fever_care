@@ -9,6 +9,7 @@ class LoginPageController extends GetxController {
   final UtilService utilService = UtilService();
   Duration get loginTime => const Duration(milliseconds: 5000);
   final isSuccess = false.obs;
+  String failed = 'Login Gagal';
 
   Future<String?> onLogin(LoginData data) {
     loginPost(data);
@@ -16,14 +17,14 @@ class LoginPageController extends GetxController {
       if(isSuccess.value){
         return null;
       }
-      return 'Login Gagal';
+      return failed;
     });
   }
 
   loginPost(LoginData data) async {
     final connect = GetConnect();
     await connect.post(
-        '${utilService.url}/api/auth',
+        '${utilService.url}/api/login',
         {
           'email' : data.name,
           'password' : data.password
@@ -39,6 +40,8 @@ class LoginPageController extends GetxController {
            box.add(response.body['user']);
          }
          isSuccess.value = true;
+      } else {
+        failed = response.body['message'];
       }
     });
   }

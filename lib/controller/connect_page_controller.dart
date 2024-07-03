@@ -15,8 +15,7 @@ class ConnectPageController extends GetxController {
   late BluetoothCharacteristic writeCharacteristic;
 
   DateTime dateToday = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-
-  var perHeartRateCount = 0;
+  int customDataCount = 1;
 
   void setupHeartRateNotifications(List<BluetoothService> services) async {
     bool isScanning = false;
@@ -25,12 +24,12 @@ class ConnectPageController extends GetxController {
     var characteristic = service.characteristics.firstWhere((c) => c.uuid == Guid('00002a37-0000-1000-8000-00805f9b34fb'));
 
     characteristic.setNotifyValue(true).then((_) {
-      heartRateStream = characteristic.onValueReceived.listen((data) async {
+      heartRateStream = characteristic.lastValueStream.listen((data) async {
         if (data.isNotEmpty) {
           int currentValue = data[1];
-
           if (currentValue == 0) {
             if (isScanning) {
+              print('PRINT IS SCANNING $data');
               await writeToSync();
               isScanning = false;
             }
@@ -42,7 +41,6 @@ class ConnectPageController extends GetxController {
     });
   }
 
-
   void setupCustomNotifications(List<BluetoothService> services) async {
     await Future.delayed(const Duration(milliseconds: 500));
     
@@ -50,12 +48,11 @@ class ConnectPageController extends GetxController {
     writeCharacteristic = service.characteristics.firstWhere((c) => c.uuid == Guid('be940001-7333-be46-b7ae-689e71722bd5'));
 
     writeCharacteristic.setNotifyValue(true).then((_) {
-      customStream = writeCharacteristic.lastValueStream.listen((data) {
+      customStream = writeCharacteristic.onValueReceived.listen((data) async {
         if (data.isNotEmpty) {
-          if(data == [5, 6, 7, 0, 1, 115, 128]) {
-            perHeartRateCount = 0;
+          if(data == [5, 9, 16, 0, 61, 0, 7, 0, 0, 0, 196, 4, 0, 0, 234, 17])  {
+            await writeToSync();
           }
-          print('Received data: $data');
         }
       });
     });
@@ -72,82 +69,51 @@ class ConnectPageController extends GetxController {
     secondCharacteristic.setNotifyValue(true).then((_) {
       customSecondStream = secondCharacteristic.onValueReceived.listen((data) {
         if (data.isNotEmpty) {
-          print('Received Second data: $data');
+          print('CUSTOM DATA $data');
           customProcessData(data);
-          perHeartRateCount++;
         }
       });
     });
   }
 
   void customProcessData(List<int> data) {
-    if (data[0] == 5 && data[1] == 21 && data.length > 4) {
-      perHeart(data);
-    } else if (data[0] == 5 && data[1] == 24 && data.length >= 18) {
+    if (data[0] == 5 && data[1] == 24 && data.length >= 18) {
       perSpo2(prepareSpo2Data(data));
-    }
-  }
-
-  Future<void> perHeart(List<int> data) async {
-    List<int> bArr = data.sublist(4);
-    int length = bArr.length;
-
-    for (int i = 0; i < length; i += 6) {
-      if (i + 6 <= length) {
-        List<int> subArr = bArr.sublist(i, i + 6);
-        int time = utilService.bytesToDec([subArr[3], subArr[2], subArr[1], subArr[0]]);
-        int heartRate = subArr[5];
-        String date = DateTime.fromMillisecondsSinceEpoch(time, isUtc: true).toString();
-
-        await saveHeartRateDataToHive(heartRate, date);
-        print("Diambil dengan waktu $date");
-        print("Heart Rate Adalah $heartRate");
-      }
+      customDataCount++;
     }
   }
 
   Future<void> perSpo2(List<List<int>> data) async {
     for (List<int> subArr in data) {
-      if (subArr.length >= 12 && subArr[1] != 0) {
-        int time = utilService.bytesToDec([subArr[11], subArr[10], subArr[9], subArr[8]]);
-        int tempInteger = subArr[1];
-        int tempDouble = subArr[2] & -1;
+      if (subArr.length >= 15) {
+        int time = utilService.bytesToDec([subArr[3], subArr[2], subArr[1], subArr[0]]);
+        int tempInteger = subArr[13];
+        int tempDouble = subArr[14] & -1;
         String date = DateTime.fromMillisecondsSinceEpoch(time, isUtc: true).toString();
-
-        await saveHeartRateDataToHive((tempInteger + tempDouble), date);
-        print("Diambil dengan waktu $date}");
-        print("Temperature Adalah $tempInteger.$tempDouble");
+        if(tempInteger != 0) {
+          await saveTemperatureDataToHive(double.parse('$tempInteger.$tempDouble'), date);
+          // print("Diambil dengan waktu $date}");
+          // print("Temperature Adalah $tempInteger.$tempDouble");
+        }
       }
     }
   }
 
   List<List<int>> prepareSpo2Data(List<int> data) {
-    List<int> bArr = data.sublist(4);
+    List<int> bArr = data.sublist(4 * customDataCount);
     List<List<int>> list = [];
     for (int j = 0; j < bArr.length; j += 20) {
       list.add(bArr.sublist(j, j + 20 > bArr.length ? bArr.length : j + 20));
     }
+    print('LIST SPO2 $list');
     return list;
   }
 
   Future<void> writeToSync() async {
     try {
-      await writeCharacteristic.write(utilService.makeSend([5,6,1]));
       await writeCharacteristic.write(utilService.makeSend([5,9,1]));
     } catch (e) {
       print('error $e');
-    }
-  }
-
-  Future<void> saveHeartRateDataToHive(int heartRate, String date) async {
-    if (Hive.isBoxOpen('heartRateData')) {
-      var box = await Hive.openBox('heartRateData');
-      List<dynamic> existingData = box.get('HRList', defaultValue: []);
-      existingData.add({
-        'date': date,
-        'heartRate': heartRate,
-      });
-      await box.put('HRList', existingData);
     }
   }
 
@@ -155,11 +121,28 @@ class ConnectPageController extends GetxController {
     if (Hive.isBoxOpen('temperatureData')) {
       var box = await Hive.openBox('temperatureData');
       List<dynamic> existingData = box.get('TempList', defaultValue: []);
-      existingData.add({
-        'date': date,
-        'temperature': temperature,
-      });
-      await box.put('TempList', existingData);
+      if(DateTime.parse(date).year == DateTime.now().year) {
+        var readingTime = date.substring(0, 23);
+        if(existingData.isNotEmpty) {
+          var lastData = existingData.last;
+
+          if(DateTime.parse(date).isAfter(DateTime.parse(lastData['date']))) {
+            existingData.add({
+              'date': readingTime,
+              'temperature': temperature,
+            });
+            await box.put('TempList', existingData);
+            await postTemperature(temperature, readingTime);
+          }
+        } else {
+          existingData.add({
+            'date': readingTime,
+            'temperature': temperature,
+          });
+          await box.put('TempList', existingData);
+          await postTemperature(temperature, readingTime);
+        }
+      }
     }
   }
 
@@ -175,37 +158,15 @@ class ConnectPageController extends GetxController {
     return box.get('deviceId');
   }
 
-  Future<void> postHeartRate(int data) async {
+  Future<void> postTemperature(double data, String date) async {
     final connect = GetConnect();
     if (Hive.isBoxOpen('token')) {
       var box = await Hive.openBox('token');
       await connect.post(
-        '${utilService.url}/api/vital',
-        {'heart_rate': data},
+        '${utilService.url}/api/temperature',
+        {'temperature': data, 'reading_time' : date},
         headers: {'Authorization': 'Bearer ${box.getAt(0)}'},
       );
-    }
-  }
-
-  Future<void> saveHeartRateHistoryToHive(int heartRate) async {
-    if (Hive.isBoxOpen('heartRateHistory')) {
-      var box = await Hive.openBox('heartRateHistory');
-      List<double> hourHeartRateAverage = List.filled(24, 0.0);
-      int hour = DateTime.now().hour;
-      if (box.isNotEmpty) {
-        if (box.get(dateToday.toString()) != null) {
-          hourHeartRateAverage = box.get(dateToday.toString());
-        }
-        if (hourHeartRateAverage[hour] == 0.0) {
-          hourHeartRateAverage[hour] = heartRate.toDouble();
-        } else {
-          hourHeartRateAverage[hour] = (heartRate.toDouble() + hourHeartRateAverage[hour]) / 2;
-        }
-      } else {
-        hourHeartRateAverage[hour] = heartRate.toDouble();
-      }
-
-      await box.put(dateToday.toString(), hourHeartRateAverage);
     }
   }
 }

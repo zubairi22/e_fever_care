@@ -2,18 +2,19 @@ import 'package:fl_chart/fl_chart.dart';
 
 class UtilService {
 
-  final url = 'http://timesynccardia.cloud';
+  final url = 'https://efevercare.id';
 
-  List<FlSpot> chartData(List<double> data) {
-    return data
-        .asMap()
-        .entries
-        .map((entry) {
-          final x = entry.key.toDouble();
-          final y = entry.value.toDouble();
-          return FlSpot(x, y);
-        })
-        .toList();
+  DateTime dateToday = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  List<FlSpot> chartData(List<dynamic> data) {
+    if (data.isEmpty) return [const FlSpot(1, 1)];
+
+    return data.map((entry) {
+      final DateTime date = DateTime.parse(entry['date']);
+      final double x = date.difference(dateToday).inMinutes.toDouble() / 10.0;
+      final double y = entry['temperature'];
+      return FlSpot(x, y);
+    }).toList();
   }
 
   List<int> syncTime(DateTime now) {

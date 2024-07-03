@@ -1,4 +1,4 @@
-import 'package:e_fever_care/view/widgets/heart_rate_card.dart';
+import 'package:e_fever_care/view/widgets/temperature_card.dart';
 import 'package:e_fever_care/view/widgets/line_chart_data.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -21,57 +21,69 @@ class HomePage extends GetView<HomePageController> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Obx(
-              () => HeartRateCard(
-                date: controller.date.value,
-                heartRate: controller.heartRate.value,
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 40,
-              child: Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.teal, width: 2),
-                    borderRadius: BorderRadius.circular(10.0),
+      body: Obx(() {
+
+        MaterialColor color = Colors.green;
+        if (controller.temperature.value > 37.5) {
+          color = Colors.red;
+        } else if (controller.temperature.value < 36) {
+          color = Colors.blue;
+        }
+
+        return Container(
+          color: color,
+          child: Center(
+            child: Column(
+              children: [
+                Obx(
+                      () => TemperatureCard(
+                    date: controller.date.value,
+                    temperature: controller.temperature.value,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Statistik Hari ini',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              color: Colors.teal,
-                              fontWeight: FontWeight.bold))
-                    ],
-                  )),
-            ),
-            Card(
-              color: Colors.teal.shade50,
-              margin: const EdgeInsets.all(20.0),
-              child: AspectRatio(
-                aspectRatio: 1.50,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    right: 18,
-                    left: 12,
-                    top: 24,
-                    bottom: 12,
-                  ),
-                  child: Obx(() => LineChart(lineData(controller.heartRateSpots))),
                 ),
-              ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 40,
+                  child: Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Colors.teal, width: 2),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Statistik Hari ini',
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: Colors.teal,
+                                  fontWeight: FontWeight.bold))
+                        ],
+                      )),
+                ),
+                Card(
+                  color: Colors.teal.shade50,
+                  margin: const EdgeInsets.all(20.0),
+                  child: AspectRatio(
+                    aspectRatio: 1.50,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 18,
+                        left: 12,
+                        top: 24,
+                        bottom: 12,
+                      ),
+                      child: Obx(() => LineChart(lineData(controller.temperatureSpots))),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }),
       resizeToAvoidBottomInset: false,
     );
   }
 }
-

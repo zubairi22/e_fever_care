@@ -9,16 +9,8 @@ class SettingsPageController extends GetxController {
   final UtilService utilService = UtilService();
   final isConnect = false.obs;
   final name = 'Guest'.obs;
-  final age = '-'.obs;
-  final height = '-'.obs;
-  final weight = '-'.obs;
   final gender = '-'.obs;
-  // final ageList = [].obs;
-  // final heightList = [].obs;
-  // final weightList = [].obs;
-  // final genderList = [
-  //   'Laki-Laki' , 'Perempuan'
-  // ].obs;
+  final dateOfBirth = '-'.obs;
 
   @override
   void onInit() {
@@ -38,28 +30,12 @@ class SettingsPageController extends GetxController {
   }
 
   Future<void> populateData () async {
-    // if(ageList.isEmpty){
-    //   for (int i = 1; i < 100; i++) {
-    //     ageList.add(i);
-    //   }
-    //
-    //   for (int i = 100; i < 300; i++) {
-    //     heightList.add(i);
-    //   }
-    //
-    //   for (int i = 0; i < 100; i++) {
-    //     weightList.add(i);
-    //   }
-    // }
-
     if (Hive.isBoxOpen('user')) {
       var box = await Hive.openBox('user');
       var value = box.getAt(0);
       name.value = value['name'];
-      age.value = value['age'];
-      height.value = value['height'];
-      weight.value = value['weight'];
-      gender.value = value['sex'];
+      gender.value = value['gender'];
+      dateOfBirth.value = value['date_of_birth'];
     }
   }
   

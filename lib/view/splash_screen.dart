@@ -28,14 +28,11 @@ class VideoState extends State<Splash> with SingleTickerProviderStateMixin {
     if (Hive.isBoxOpen('user')) {
       var box = await Hive.openBox('user');
       if(box.isNotEmpty) {
-        Get.to(() => const MainPage());
+        Get.offAll(() => const MainPage());
       } else {
-        Get.to(() => const LoginPage());
+        Get.offAll(() => const LoginPage());
       }
-    } else {
-      Get.to(() => const LoginPage());
     }
-
   }
 
   @override

@@ -118,8 +118,9 @@ class FindDevicesScreen extends GetView<ConnectPageController> {
                                             icon: const Icon(Icons.error, color: Colors.red),
                                           );
                                         }
+                                      }).then((v) {
+                                        Get.to(() => const MainPage());
                                       });
-                                      Get.to(() => const MainPage(), arguments: 3);
                                     },
                                   );
                                 }

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 LineChartData lineData(List<FlSpot> heartRateSpots) {
   return LineChartData(
     minX: 0,
-    maxX: 24,
-    minY: 0,
-    maxY: 150,
-    baselineY: 0,
+    maxX: 143,
+    minY: 32.2,
+    maxY: 45.0,
+    baselineY: 32.2,
     baselineX: 0,
     titlesData: const FlTitlesData(
       show: true,
@@ -74,12 +74,9 @@ Widget bottomTitleWidgets(double value, TitleMeta meta) {
   Widget text;
   switch (value.toInt()) {
     case 0:
-      text = const Text('00', style: style);
+      text = const Text('0', style: style);
       break;
-    case 12:
-      text = const Text('12', style: style);
-      break;
-    case 24:
+    case 143:
       text = const Text('24', style: style);
       break;
     default:
@@ -100,26 +97,11 @@ Widget leftTitleWidgets(double value, TitleMeta meta) {
   );
   String text;
   switch (value.toInt()) {
-    case 1:
-      text = '0';
+    case 32:
+      text = '32°c';
       break;
-    case 40:
-      text = '40';
-      break;
-    case 60:
-      text = '60';
-      break;
-    case 80:
-      text = '80';
-      break;
-    case 100:
-      text = '100';
-      break;
-    case 120:
-      text = '120';
-      break;
-    case 150:
-      text = '150';
+    case 45:
+      text = '45°c';
       break;
     default:
       return Container();

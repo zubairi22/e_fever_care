@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:e_fever_care/binding/main_bindings.dart';
 import 'package:e_fever_care/view/history/history_page.dart';
 import 'package:e_fever_care/view/home_page.dart';
-import 'package:e_fever_care/view/hospital/hospital_page.dart';
 import 'package:e_fever_care/view/main_page.dart';
-import 'package:e_fever_care/view/news/news_page.dart';
 import 'package:e_fever_care/view/settings_page.dart';
 import 'package:e_fever_care/view/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +14,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 void main() async {
   await Hive.initFlutter();
-  await Hive.openBox('heartRateData');
-  await Hive.openBox('heartRateHistory');
+  await Hive.openBox('temperatureData');
   await Hive.openBox('deviceData');
   await Hive.openBox('user');
   await Hive.openBox('token');
@@ -58,8 +55,6 @@ class MyApp extends StatelessWidget {
               GetPage(name: '/main', page: () => const MainPage()),
               GetPage(name: '/home', page: () => const HomePage()),
               GetPage(name: '/history', page: () => const HistoryPage()),
-              GetPage(name: '/news', page: () => const NewsPage()),
-              GetPage(name: '/hospital', page: () => const HospitalPage()),
               GetPage(name: '/setting', page: () => const SettingsPage()),
             ],
           );

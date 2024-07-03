@@ -42,15 +42,14 @@ class HistoryPage extends GetView<HistoryPageController> {
                             onPressed: () {
                               if (controller.listLength.value > 0) {
                                 controller.listLength.value--;
-                                controller.getHeartRateHistory(controller
+                                controller.getTemperatureHistory(controller
                                     .listKeys[controller.listLength.value]);
                               }
                             },
                           ),
                           Text(
                               controller.listKeys.isNotEmpty
-                                  ? controller
-                                      .listKeys[controller.listLength.value]
+                                  ? controller.listKeys[controller.listLength.value]
                                   : controller.dateYesterday,
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w700)),
@@ -60,7 +59,7 @@ class HistoryPage extends GetView<HistoryPageController> {
                             onPressed: () {
                               if (controller.listLength.value < controller.listKeys.length - 1) {
                                 controller.listLength.value++;
-                                controller.getHeartRateHistory(controller
+                                controller.getTemperatureHistory(controller
                                     .listKeys[controller.listLength.value]);
                               }
                             },
@@ -85,7 +84,7 @@ class HistoryPage extends GetView<HistoryPageController> {
                         bottom: 12,
                       ),
                       child: Obx(() => LineChart(
-                          lineData(controller.dayHeartRateSpots))),
+                          lineData(controller.dayTemperatureSpots))),
                     ),
                   ),
                 ],
@@ -105,12 +104,12 @@ class HistoryPage extends GetView<HistoryPageController> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.favorite,
+                            Icon(Icons.thermostat,
                                 color: Colors.red, size: 8.w),
                             const SizedBox(width: 5),
                             Column(
                               children: [
-                                Text(controller.maxToday.value,
+                                Text(controller.max.value.toString(),
                                     style: TextStyle(fontSize: 16.sp)),
                                 const Text('Tertinggi',
                                     style: TextStyle(fontSize: 12)),
@@ -120,12 +119,12 @@ class HistoryPage extends GetView<HistoryPageController> {
                         ),
                         Row(
                           children: [
-                            Icon(Icons.favorite,
+                            Icon(Icons.thermostat,
                                 color: Colors.green, size: 8.w),
                             const SizedBox(width: 5),
                             Column(
                               children: [
-                                Text(controller.averageToday.value,
+                                Text(controller.average.value.toString(),
                                     style: TextStyle(fontSize: 16.sp)),
                                 const Text('Rata-Rata',
                                     style: TextStyle(fontSize: 12)),
@@ -135,12 +134,12 @@ class HistoryPage extends GetView<HistoryPageController> {
                         ),
                         Row(
                           children: [
-                            Icon(Icons.favorite,
+                            Icon(Icons.thermostat,
                                 color: Colors.blue, size: 8.w),
                             const SizedBox(width: 5),
                             Column(
                               children: [
-                                Text(controller.minToday.value,
+                                Text(controller.min.value.toString(),
                                     style: TextStyle(fontSize: 16.sp)),
                                 const Text('Terendah',
                                     style: TextStyle(fontSize: 12)),
