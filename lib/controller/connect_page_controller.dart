@@ -16,25 +16,23 @@ class ConnectPageController extends GetxController {
 
   DateTime dateToday = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   int customDataCount = 1;
+  Timer? customDataTimer;
 
   void setupHeartRateNotifications(List<BluetoothService> services) async {
-    bool isScanning = false;
-
     var service = services.firstWhere((s) => s.uuid == Guid('0000180d-0000-1000-8000-00805f9b34fb'));
     var characteristic = service.characteristics.firstWhere((c) => c.uuid == Guid('00002a37-0000-1000-8000-00805f9b34fb'));
+    int valueOld = 1;
 
     characteristic.setNotifyValue(true).then((_) {
       heartRateStream = characteristic.lastValueStream.listen((data) async {
         if (data.isNotEmpty) {
-          int currentValue = data[1];
-          if (currentValue == 0) {
-            if (isScanning) {
-              print('PRINT IS SCANNING $data');
+          if (data[1] == 0) {
+            if (valueOld != 1) {
               await writeToSync();
-              isScanning = false;
+              valueOld = 1;
             }
           } else {
-            isScanning = true;
+            valueOld = data[1];
           }
         }
       });
@@ -60,7 +58,8 @@ class ConnectPageController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 500));
 
     await writeCharacteristic.write(utilService.syncTime(DateTime.now()));
-    await writeCharacteristic.write(utilService.makeSend([1,12,1,30]));
+    await Future.delayed(const Duration(milliseconds: 500));
+    await writeCharacteristic.write(utilService.makeSend([1,12,1,10]));
 
     await Future.delayed(const Duration(milliseconds: 500));
 
@@ -71,9 +70,13 @@ class ConnectPageController extends GetxController {
         if (data.isNotEmpty) {
           print('CUSTOM DATA $data');
           customProcessData(data);
+          resetCustomDataTimer();
         }
       });
     });
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    await writeToSync();
   }
 
   void customProcessData(List<int> data) {
@@ -81,6 +84,13 @@ class ConnectPageController extends GetxController {
       perSpo2(prepareSpo2Data(data));
       customDataCount++;
     }
+  }
+
+  void resetCustomDataTimer() {
+    customDataTimer?.cancel();
+    customDataTimer = Timer(Duration(seconds: 1), () {
+      customDataCount = 1;
+    });
   }
 
   Future<void> perSpo2(List<List<int>> data) async {
@@ -101,6 +111,7 @@ class ConnectPageController extends GetxController {
 
   List<List<int>> prepareSpo2Data(List<int> data) {
     List<int> bArr = data.sublist(4 * customDataCount);
+
     List<List<int>> list = [];
     for (int j = 0; j < bArr.length; j += 20) {
       list.add(bArr.sublist(j, j + 20 > bArr.length ? bArr.length : j + 20));
@@ -121,7 +132,8 @@ class ConnectPageController extends GetxController {
     if (Hive.isBoxOpen('temperatureData')) {
       var box = await Hive.openBox('temperatureData');
       List<dynamic> existingData = box.get('TempList', defaultValue: []);
-      if(DateTime.parse(date).year == DateTime.now().year) {
+      print('ini date nya $date');
+      if(DateTime.parse(date).year == DateTime.now().year && DateTime.parse(date).month == DateTime.now().month) {
         var readingTime = date.substring(0, 23);
         if(existingData.isNotEmpty) {
           var lastData = existingData.last;
@@ -167,6 +179,16 @@ class ConnectPageController extends GetxController {
         {'temperature': data, 'reading_time' : date},
         headers: {'Authorization': 'Bearer ${box.getAt(0)}'},
       );
+    }
+  }
+
+  Future<void> resetDevice() async {
+    try {
+      await writeCharacteristic.write(utilService.makeSend([5, 68, 3]));
+      await Future.delayed(const Duration(milliseconds: 500));
+      await writeCharacteristic.write(utilService.makeSend([1, 14, 82, 83, 89, 83]));
+    } catch (e) {
+      print('error $e');
     }
   }
 }

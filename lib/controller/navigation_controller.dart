@@ -1,3 +1,4 @@
+import 'package:e_fever_care/controller/history_page_controller.dart';
 import 'package:e_fever_care/view/history/history_page.dart';
 import 'package:e_fever_care/view/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -33,5 +34,10 @@ class NavigationController extends GetxController {
 
   void changePage(int index) {
     selectedIndex.value = index;
+    if (index == 1) {
+      HistoryPageController historyController = Get.find();
+      historyController.setupPage();
+      historyController.getTemperatureHistory(historyController.dateYesterday);
+    }
   }
 }

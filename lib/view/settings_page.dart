@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+import '../controller/connect_page_controller.dart';
 import '../controller/settings_page_controller.dart';
 
 class SettingsPage extends GetView<SettingsPageController> {
@@ -61,6 +62,24 @@ class SettingsPage extends GetView<SettingsPageController> {
                   Get.to(() => const ConnectPage());
                 },
               ),
+              if (controller.isConnect.value)
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.restart_alt_rounded),
+                  title: const Text('Reset Device'),
+                  onPressed: (c) {
+                    Get.defaultDialog(
+                      title: 'Konfirmasi',
+                      middleText: 'Apakah Anda yakin ingin mereset perangkat?',
+                      textCancel: 'Batal',
+                      textConfirm: 'Ya',
+                      onConfirm: () {
+                        Get.back();
+                        ConnectPageController connectController = Get.find<ConnectPageController>();
+                        connectController.resetDevice();
+                      },
+                    );
+                  },
+                ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.logout),
                 title: const Text('Logout'),

@@ -6,12 +6,12 @@ class UtilService {
 
   DateTime dateToday = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-  List<FlSpot> chartData(List<dynamic> data) {
+  List<FlSpot> chartData(List<dynamic> data , {DateTime? dateDiff}) {
     if (data.isEmpty) return [const FlSpot(1, 1)];
-
+    dateDiff ??= dateToday;
     return data.map((entry) {
       final DateTime date = DateTime.parse(entry['date']);
-      final double x = date.difference(dateToday).inMinutes.toDouble() / 10.0;
+      final double x = date.difference(dateDiff!).inMinutes.toDouble() / 10.0;
       final double y = entry['temperature'];
       return FlSpot(x, y);
     }).toList();

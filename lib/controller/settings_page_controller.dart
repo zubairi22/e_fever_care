@@ -52,12 +52,8 @@ class SettingsPageController extends GetxController {
       var box = await Hive.openBox('deviceData');
       box.clear();
     }
-    if (Hive.isBoxOpen('heartRateData')) {
-      var box = await Hive.openBox('heartRateData');
-      await box.clear();
-    }
-    if (Hive.isBoxOpen('heartRateHistory')) {
-      var box = await Hive.openBox('heartRateHistory');
+    if (Hive.isBoxOpen('temperatureData')) {
+      var box = await Hive.openBox('temperatureData');
       await box.clear();
     }
     Get.to(() => const LoginPage());

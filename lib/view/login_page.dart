@@ -12,11 +12,6 @@ class LoginPage extends GetView<LoginPageController> {
   Widget build(BuildContext context) {
     return FlutterLogin(
       logo: const AssetImage('assets/logo.png'),
-      theme: LoginTheme(
-        titleStyle: const TextStyle(
-          color: Colors.white,
-        ),
-      ),
       onLogin: controller.onLogin,
       hideForgotPasswordButton: true,
       onSubmitAnimationCompleted: () {
